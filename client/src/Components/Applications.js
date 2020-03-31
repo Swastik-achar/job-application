@@ -11,6 +11,8 @@ import {
 import Moment from "react-moment";
 import Swal from "sweetalert2";
 import { startUpdateApplication } from "../Actions/applicationsAction";
+import { findApplicationByCategory } from "../Selector/findApplicationByCategory";
+import { connect } from "react-redux";
 
 function Applications(props) {
   const [page, setPage] = React.useState(0);
@@ -55,6 +57,7 @@ function Applications(props) {
                   `
     });
   };
+  console.log(props.applications)
   return (
     <div align="center">
       {props.applications !== undefined && (
@@ -170,5 +173,11 @@ function Applications(props) {
     </div>
   );
 }
+const mapStateToProps = (state, props) => {
+  const category = props.category;
+  return {
+    applications: findApplicationByCategory(state.applications, category)
+  };
+};
 
-export default Applications;
+export default connect(mapStateToProps)(Applications);
