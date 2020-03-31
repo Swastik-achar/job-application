@@ -2,22 +2,18 @@ import React, { useState } from "react";
 
 import "react-tabs/style/react-tabs.css";
 import { Tabs, Tab, Paper } from "@material-ui/core";
-import { connect } from "react-redux";
 
 import Applications from "./Applications";
 
 function Dashboard(props) {
   const [value, setValue] = useState(0);
+  const [category, setCategory] = useState("Front-End Developer");
   const categories = [
     "Front-End Developer",
     "Node.js Developer",
     "MEAN Stack Developer",
-    "Full Stack Developer"
+    "FULL Stack Developer"
   ];
-  const handleChange = (e, newValue) => {
-    setValue(newValue);
-    console.log(newValue);
-  };
 
   return (
     <div style={{ marginLeft: "100px" }}>
@@ -29,45 +25,23 @@ function Dashboard(props) {
           value={value}
           indicatorColor="primary"
           textColor="primary"
-          onChange={handleChange}
           centered
+          onChange={(e, newValue) => setValue(newValue)}
         >
-          {categories.map(category => {
-            return <Tab label={category} />;
+          {categories.map((category, i) => {
+            return (
+              <Tab
+                key={i}
+                label={category}
+                onClick={() => setCategory(category)}
+              />
+            );
           })}
         </Tabs>
       </Paper>
-      {value === 0 && (
-        <Applications applications={props.frontEndApplications} store={props} />
-      )}
-      {value === 1 && (
-        <Applications applications={props.nodeJsApplications} store={props} />
-      )}
-      {value === 2 && (
-        <Applications applications={props.MeanStackDeveloper} store={props} />
-      )}
-      {value === 3 && (
-        <Applications applications={props.FullStackDeveloper} store={props} />
-      )}
+      <Applications category={category} />
     </div>
   );
 }
 
-const mapStateToProps = state => {
-  return {
-    frontEndApplications: state.applications.filter(
-      ele => ele.jobTitle === "Front-End Developer"
-    ),
-    nodeJsApplications: state.applications.filter(
-      ele => ele.jobTitle === "Node.js Developer"
-    ),
-    MeanStackDeveloper: state.applications.filter(
-      ele => ele.jobTitle === "MEAN Stack Developer"
-    ),
-    FullStackDeveloper: state.applications.filter(
-      ele => ele.jobTitle === "FULL Stack Developer"
-    )
-  };
-};
-
-export default connect(mapStateToProps)(Dashboard);
+export default Dashboard;
